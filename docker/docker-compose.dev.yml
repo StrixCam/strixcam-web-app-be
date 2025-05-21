@@ -1,0 +1,19 @@
+services:
+  strixcam-web-app-be:
+    container_name: strixcam-web-app-be
+    build:
+      context: ..
+      dockerfile: ./docker/Dockerfile.dev
+    ports:
+      - "3000:3000"
+    volumes:
+      - ../src:/app/src
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+    networks:
+      - strixcam-net-dev
+
+networks:
+  strixcam-net-dev:
+    external: true
