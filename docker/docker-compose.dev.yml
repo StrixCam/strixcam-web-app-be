@@ -10,7 +10,11 @@ services:
       - ../src:/app/src
       - /app/node_modules
     environment:
-      - NODE_ENV=development
+      - DB_PG_USER=strixcam
+      - DB_PG_PASSWORD=strixcam
+      - DB_PG_HOST=strixcam-db-postgres
+      - DB_PG_PORT=5432
+      - DB_PG_DATABASE=strixcam
     networks:
       - strixcam-net-dev
 

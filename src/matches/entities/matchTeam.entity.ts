@@ -1,25 +1,18 @@
-import {
-  Column,
-  Entity,
-  JoinColumn,
-  ManyToOne,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
-import { Match } from './match.entity';
+import { Team } from '../../teams/entities';
+import { Match } from '.';
 
-@Entity({ schema: 'matches', name: 'match_team' })
+@Entity({ name: 'match_team' })
 export class MatchTeam {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ type: 'uuid' })
-  teamId: string;
+  @ManyToOne(() => Team, team => team.matchTeams, { onDelete: 'RESTRICT' })
+  @JoinColumn({ name: 'teamId' })
+  team: Team;
 
-  @Column({ type: 'enum', enum: ['home', 'away'] })
-  role: 'home' | 'away';
-
-  @ManyToOne(() => Match, match => match.teams, { onDelete: 'CASCADE' })
-  @JoinColumn({ name: 'match_id' })
-  match: Match;
+  @ManyToOne(() => Match, match => match.matchTeam, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'matchId' })
+  matches: Match;
 }

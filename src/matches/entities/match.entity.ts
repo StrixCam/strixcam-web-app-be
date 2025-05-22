@@ -2,33 +2,26 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
+  ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 
-import { MatchEvent } from './matchEvent.entity';
+import { Sport } from '../../sports/entities';
 import { MatchTeam } from './matchTeam.entity';
 
-@Entity({ schema: 'matches', name: 'match' })
+@Entity({ name: 'match' })
 export class Match {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column()
-  name: string;
-
   @Column({ type: 'timestamp' })
   scheduledAt: Date;
 
-  @Column({ nullable: true })
-  location?: string;
-
-  @Column({ default: false })
-  isLive: boolean;
-
-  @Column({ default: false })
-  isFinished: boolean;
+  @Column({ type: 'uuid' })
+  matchId: string;
 
   @CreateDateColumn()
   createdAt: Date;
@@ -36,9 +29,10 @@ export class Match {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @OneToMany(() => MatchTeam, mt => mt.match)
-  teams: MatchTeam[];
+  @OneToMany(() => MatchTeam, matchTeam => matchTeam.matches, { cascade: true })
+  matchTeam: MatchTeam[];
 
-  @OneToMany(() => MatchEvent, event => event.match)
-  events: MatchEvent[];
+  @ManyToOne(() => Sport, sport => sport.matches, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'sportId' })
+  sport: Match;
 }

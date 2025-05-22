@@ -1,4 +1,9 @@
 import { Module } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
 
-@Module({})
+import { MatchEntities } from './entities';
+
+@Module({
+  imports: [TypeOrmModule.forFeature(MatchEntities)],
+})
 export class MatchModule {}
