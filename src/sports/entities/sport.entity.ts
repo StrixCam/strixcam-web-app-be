@@ -31,4 +31,7 @@ export class Sport {
 
   @OneToMany(() => Match, match => match.sport, { cascade: true })
   matches: Match[];
+
+  @OneToMany(() => Match, matchEvent => matchEvent.sport, { cascade: true })
+  matchEvents: Match[];
 }
