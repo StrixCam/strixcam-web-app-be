@@ -1,13 +1,15 @@
-import type { MatchRuleSet } from '../../matches/entities';
+import type { DeepPartial } from 'typeorm';
+
+import type { SeedData } from '../../database/database.seeder';
 import type { Sport } from '../../sports/entities';
 import { Tournament } from './tournament.entity';
 
-export const TournamentSeed = {
+export const TournamentSeed: SeedData<Tournament> = {
   entity: Tournament,
   name: 'Tournament',
   data: [
     {
-      name: 'Torneo Ex Alumnos 2025',
+      name: 'Torneo Ex Alumnos MTN 2025',
       description: 'Torneo organizado por los ex alumnos de la escuela uemtn',
       isActive: true,
       startDate: new Date('2025-05-31'),
@@ -17,8 +19,7 @@ export const TournamentSeed = {
       hasOvertime: false,
       hasTieBreaker: true,
       onlyForKnockouts: true,
-      sport: { id: 'uuid-soccer' } as Partial<Sport>,
-      ruleset: { id: 'uuid-ruleset' } as Partial<MatchRuleSet>,
+      sport: { name: 'Soccer' } as DeepPartial<Sport>,
     },
-  ] as Partial<Tournament>[],
+  ],
 };

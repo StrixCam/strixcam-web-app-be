@@ -7,6 +7,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
+import { Event } from '../../events/entities/event.entity';
 import { Match, MatchRuleSet } from '../../matches/entities';
 
 @Entity({ name: 'sport' })
@@ -31,6 +32,9 @@ export class Sport {
 
   @OneToMany(() => Match, match => match.sport, { cascade: true })
   matches: Match[];
+
+  @OneToMany(() => Event, event => event.sport, { cascade: true })
+  events: Event[];
 
   @OneToMany(() => MatchRuleSet, matchRuleSet => matchRuleSet.sport, {
     cascade: true,

@@ -11,7 +11,7 @@ import {
 
 import { Sport } from '../../sports/entities';
 import { Tournament } from '../../tournaments/entities';
-import { MatchRuleSet, MatchTeam } from './';
+import { MatchRuleSet, MatchTeam } from '.';
 
 @Entity({ name: 'match' })
 export class Match {

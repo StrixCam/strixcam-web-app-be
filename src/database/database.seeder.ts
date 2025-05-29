@@ -1,10 +1,15 @@
 import { Logger } from '@nestjs/common';
-import type { DataSource, EntityTarget, ObjectLiteral } from 'typeorm';
+import type {
+  DataSource,
+  DeepPartial,
+  EntityTarget,
+  ObjectLiteral,
+} from 'typeorm';
 
 export interface SeedData<T extends ObjectLiteral> {
   entity: EntityTarget<T>;
   name?: string;
-  data: Partial<T>[];
+  data: DeepPartial<T>[];
 }
 
 export async function seeder<T extends ObjectLiteral>(

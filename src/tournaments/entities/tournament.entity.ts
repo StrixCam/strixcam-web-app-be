@@ -28,7 +28,6 @@ export class Tournament {
   sport: Sport;
 
   @ManyToOne(() => MatchRuleSet, { nullable: false })
-  @JoinColumn({ name: 'rulesetId' })
   ruleset: MatchRuleSet;
 
   @Column({ type: 'int', nullable: true })
@@ -63,4 +62,7 @@ export class Tournament {
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+  @OneToMany(() => Match, match => match.tournament, { cascade: true })
+  tournament: Match[];
 }

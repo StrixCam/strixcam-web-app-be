@@ -1,6 +1,7 @@
+import type { SeedData } from '../../database/database.seeder';
 import { Sport } from './sport.entity';
 
-export const SportSeed = {
+export const SportSeed: SeedData<Sport> = {
   entity: Sport,
   name: 'Sport',
   data: [
@@ -16,5 +17,5 @@ export const SportSeed = {
       },
       isActive: true,
     },
-  ] as Partial<Sport>[],
+  ],
 };
