@@ -16,6 +16,7 @@ import { SportsModule } from './sports/sports.module';
 import { StreamsModule } from './streams/streams.module';
 import { TeamsModule } from './teams/teams.module';
 import { UsersModule } from './users/users.module';
+import { TournamentsModule } from './tournaments/tournaments.module';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { UsersModule } from './users/users.module';
     NotificationsModule,
     EventsModule,
     ScoresModule,
+    TournamentsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
