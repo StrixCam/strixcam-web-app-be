@@ -1,7 +1,7 @@
 import { Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 import { Team } from '../../teams/entities';
-import { Match } from '.';
+import { Match } from './match.entity';
 
 @Entity({ name: 'match_team' })
 export class MatchTeam {

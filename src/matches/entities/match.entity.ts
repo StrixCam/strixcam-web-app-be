@@ -11,7 +11,8 @@ import {
 
 import { Sport } from '../../sports/entities';
 import { Tournament } from '../../tournaments/entities';
-import { MatchRuleSet, MatchTeam } from '.';
+import { MatchRuleSet } from './matchRuleSet.entity';
+import { MatchTeam } from './matchTeam.entity';
 
 @Entity({ name: 'match' })
 export class Match {
@@ -36,7 +37,7 @@ export class Match {
 
   @ManyToOne(() => MatchRuleSet, { nullable: true })
   @JoinColumn({ name: 'rulesetId' })
-  ruleset?: MatchRuleSet;
+  ruleset: MatchRuleSet;
 
   @ManyToOne(() => Sport, sport => sport.matches, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'sportId' })
