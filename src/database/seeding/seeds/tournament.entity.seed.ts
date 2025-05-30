@@ -1,8 +1,8 @@
 import type { DeepPartial } from 'typeorm';
 
-import type { SeedData } from '../../database/database.seeder';
-import type { Sport } from '../../sports/entities';
-import { Tournament } from './tournament.entity';
+import type { Sport } from '../../../sports/entities';
+import { Tournament } from '../../../tournaments/entities';
+import type { SeedData } from '../database.seeder';
 
 export const TournamentSeed: SeedData<Tournament> = {
   entity: Tournament,
@@ -10,7 +10,6 @@ export const TournamentSeed: SeedData<Tournament> = {
   data: [
     {
       name: 'Torneo Ex Alumnos MTN 2025',
-      description: 'Torneo organizado por los ex alumnos de la escuela uemtn',
       isActive: true,
       startDate: new Date('2025-05-31'),
       endDate: new Date('2028-08-13'),

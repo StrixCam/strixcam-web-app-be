@@ -10,13 +10,14 @@ import { MediaModule } from './media/media.module';
 import { NotificationsModule } from './notifications/notifications.module';
 import { OverlayModule } from './overlays/overlays.module';
 import { PlayersModule } from './players/players.module';
+import { RuleSetsModule } from './rulesets/ruleSet.module';
 import { ScoresModule } from './scores/scores.module';
 import { SettingsModule } from './settings/settings.module';
 import { SportsModule } from './sports/sports.module';
 import { StreamsModule } from './streams/streams.module';
 import { TeamsModule } from './teams/teams.module';
-import { UsersModule } from './users/users.module';
 import { TournamentsModule } from './tournaments/tournaments.module';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -35,6 +36,7 @@ import { TournamentsModule } from './tournaments/tournaments.module';
     EventsModule,
     ScoresModule,
     TournamentsModule,
+    RuleSetsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

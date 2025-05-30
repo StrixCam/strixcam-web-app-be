@@ -8,7 +8,9 @@ import {
 } from 'typeorm';
 
 import { Event } from '../../events/entities/event.entity';
-import { Match, MatchRuleSet } from '../../matches/entities';
+import { Match } from '../../matches/entities';
+import { RuleSet } from '../../rulesets/entities/ruleSet.entity';
+import { Tournament } from '../../tournaments/entities/tournament.entity';
 
 @Entity({ name: 'sport' })
 export class Sport {
@@ -36,8 +38,13 @@ export class Sport {
   @OneToMany(() => Event, event => event.sport, { cascade: true })
   events: Event[];
 
-  @OneToMany(() => MatchRuleSet, matchRuleSet => matchRuleSet.sport, {
+  @OneToMany(() => RuleSet, ruleSet => ruleSet.sport, {
     cascade: true,
   })
-  matchRuleSets: MatchRuleSet[];
+  ruleSets: RuleSet[];
+
+  @OneToMany(() => Tournament, tournament => tournament.sport, {
+    cascade: true,
+  })
+  tournaments: Tournament[];
 }

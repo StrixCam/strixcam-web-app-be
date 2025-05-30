@@ -1,37 +1,29 @@
-import { Injectable, OnModuleInit } from '@nestjs/common';
+import { Injectable, OnApplicationBootstrap } from '@nestjs/common';
 import { Logger } from '@nestjs/common';
 import { DataSource } from 'typeorm';
 
-import { MatchRuleSetSeed } from '../matches/entities/matchRuleSet.entity.seed';
-import { Sport } from '../sports/entities';
-import { SportSeed } from '../sports/entities/sport.entity.seed';
-import { Tournament } from '../tournaments/entities';
-import { TournamentSeed } from '../tournaments/entities/tournament.entity.seed';
+import { Sport } from '../../sports/entities';
+import { Tournament } from '../../tournaments/entities';
 import { seeder } from './database.seeder';
+import { RuleSetSeed } from './seeds/ruleSet.entity.seed';
+import { SportSeed } from './seeds/sport.entity.seed';
+import { TournamentSeed } from './seeds/tournament.entity.seed';
 
 @Injectable()
-export class DatabaseService implements OnModuleInit {
+export class DatabaseSeedingService implements OnApplicationBootstrap {
   constructor(private readonly dataSource: DataSource) {}
 
-  private readonly logger = new Logger(DatabaseService.name);
+  private readonly logger = new Logger();
 
-  async onModuleInit() {
+  async onApplicationBootstrap() {
     if (!this.dataSource.isInitialized) {
       await this.dataSource.initialize();
     }
 
     // 1. Seed Sports
-    this.logger.debug(`Seeding Sports... ${JSON.stringify(SportSeed.data)}`);
-
     await seeder(this.dataSource, SportSeed);
 
-    this.logger.debug(
-      `Seeding MatchRuleSets... ${JSON.stringify(MatchRuleSetSeed.data)}`,
-    );
-    this.logger.debug(
-      `Seeding Tournaments... ${JSON.stringify(TournamentSeed.data)}`,
-    );
-    // 2. Seed Tournaments
+    // 2. Resolve sport for TournamentSeed (needed before creating RuleSetSeed)
     for (const tournament of TournamentSeed.data) {
       if (tournament.sport?.name) {
         const sport = await this.dataSource
@@ -42,13 +34,12 @@ export class DatabaseService implements OnModuleInit {
         tournament.sport = sport;
       }
     }
-    this.logger.debug(
-      `Tournaments after processing: ${JSON.stringify(TournamentSeed.data)}`,
-    );
+
+    // 3. Seed Tournaments (after resolving sport, but before RuleSet needs them)
     await seeder(this.dataSource, TournamentSeed);
 
-    // 3. Seed MatchRuleSets
-    for (const rule of MatchRuleSetSeed.data) {
+    // 4. Resolve sport + tournament for RuleSetSeed
+    for (const rule of RuleSetSeed.data) {
       if (rule.sport?.name) {
         const sport = await this.dataSource
           .getRepository(Sport)
@@ -56,9 +47,6 @@ export class DatabaseService implements OnModuleInit {
         if (!sport) throw new Error(`Sport "${rule.sport.name}" not found`);
         rule.sport = sport;
       }
-    }
-
-    for (const rule of MatchRuleSetSeed.data) {
       if (rule.tournament?.name) {
         const tournament = await this.dataSource
           .getRepository(Tournament)
@@ -68,9 +56,8 @@ export class DatabaseService implements OnModuleInit {
         rule.tournament = tournament;
       }
     }
-    this.logger.debug(
-      `MatchRuleSets after processing: ${JSON.stringify(MatchRuleSetSeed.data)}`,
-    );
-    await seeder(this.dataSource, MatchRuleSetSeed);
+
+    // 5. Seed RuleSets (FKs to sport + tournament are now resolved)
+    await seeder(this.dataSource, RuleSetSeed);
   }
 }

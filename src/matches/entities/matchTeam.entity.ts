@@ -12,7 +12,7 @@ export class MatchTeam {
   @JoinColumn({ name: 'teamId' })
   team: Team;
 
-  @ManyToOne(() => Match, match => match.matchTeam, { onDelete: 'CASCADE' })
+  @ManyToOne(() => Match, match => match.matchTeams, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'matchId' })
-  matches: Match;
+  match: Match;
 }

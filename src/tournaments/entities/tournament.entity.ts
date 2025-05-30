@@ -5,11 +5,13 @@ import {
   JoinColumn,
   ManyToOne,
   OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 
-import { Match, MatchRuleSet } from '../../matches/entities';
+import { Match } from '../../matches/entities';
+import { RuleSet } from '../../rulesets/entities';
 import { Sport } from '../../sports/entities';
 
 @Entity({ name: 'tournament' })
@@ -20,15 +22,9 @@ export class Tournament {
   @Column()
   name: string;
 
-  @Column({ nullable: true })
-  description?: string;
-
   @ManyToOne(() => Sport, { nullable: false })
   @JoinColumn({ name: 'sportId' })
   sport: Sport;
-
-  @ManyToOne(() => MatchRuleSet, { nullable: false })
-  ruleset: MatchRuleSet;
 
   @Column({ type: 'int', nullable: true })
   maxPlayersPerTeam?: number;
@@ -54,15 +50,15 @@ export class Tournament {
   @Column({ type: 'date', nullable: true })
   endDate?: Date;
 
-  @OneToMany(() => Match, match => match.tournament)
-  matches: Match[];
-
   @CreateDateColumn()
   createdAt: Date;
 
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @OneToMany(() => Match, match => match.tournament, { cascade: true })
-  tournament: Match[];
+  @OneToMany(() => Match, match => match.tournament)
+  matches: Match[];
+
+  @OneToOne(() => RuleSet, ruleset => ruleset.tournament, { nullable: false })
+  ruleset: RuleSet;
 }

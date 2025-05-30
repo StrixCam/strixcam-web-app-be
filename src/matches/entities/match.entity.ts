@@ -1,4 +1,5 @@
 import {
+  Check,
   Column,
   CreateDateColumn,
   Entity,
@@ -9,18 +10,22 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
+import { RuleSet } from '../../rulesets/entities';
 import { Sport } from '../../sports/entities';
 import { Tournament } from '../../tournaments/entities';
-import { MatchRuleSet } from './matchRuleSet.entity';
 import { MatchTeam } from './matchTeam.entity';
 
+@Check(`
+  ("isTournamentMatch" = true AND "tournamentId" IS NOT NULL AND "rulesetId" IS NULL)
+  OR ("isTournamentMatch" = false AND "tournamentId" IS NULL AND "rulesetId" IS NOT NULL)
+`)
 @Entity({ name: 'match' })
 export class Match {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ type: 'uuid' })
-  matchId: string;
+  @Column()
+  name: string;
 
   @Column({ type: 'timestamp' })
   scheduledAt: Date;
@@ -35,16 +40,16 @@ export class Match {
   @JoinColumn({ name: 'tournamentId' })
   tournament?: Tournament;
 
-  @ManyToOne(() => MatchRuleSet, { nullable: true })
+  @ManyToOne(() => RuleSet, ruleSet => ruleSet.matches)
   @JoinColumn({ name: 'rulesetId' })
-  ruleset: MatchRuleSet;
+  ruleset?: RuleSet;
 
   @ManyToOne(() => Sport, sport => sport.matches, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'sportId' })
   sport: Sport;
 
-  @OneToMany(() => MatchTeam, matchTeam => matchTeam.matches, { cascade: true })
-  matchTeam: MatchTeam[];
+  @OneToMany(() => MatchTeam, matchTeam => matchTeam.match)
+  matchTeams: MatchTeam[];
 
   @CreateDateColumn()
   createdAt: Date;

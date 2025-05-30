@@ -5,18 +5,30 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 
-import { Sport } from '../../sports/entities/';
+import { Match } from '../../matches/entities';
+import { Sport } from '../../sports/entities';
 import { Tournament } from '../../tournaments/entities';
 
 @Check(
+  `"periodCount" > 0 AND "periodDuration" > 0 AND "playersOnFieldPerTeam" > 0`,
+)
+@Check(
+  `"hasOvertime" = false OR ("overtimeCount" > 0 AND "overtimeDuration" > 0)`,
+)
+@Check(
+  `"hasTieBreaker" = false OR ("overtimeCount" IS NOT NULL AND "overtimeDuration" IS NOT NULL)`,
+)
+@Check(
   `"isFromTournament" = false OR ("isFromTournament" = true AND "tournamentId" IS NOT NULL)`,
 )
-@Entity({ name: 'match_ruleset' })
-export class MatchRuleSet {
+@Entity({ name: 'ruleset' })
+export class RuleSet {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -50,13 +62,13 @@ export class MatchRuleSet {
   @Column({ default: false })
   isFromTournament: boolean;
 
-  @ManyToOne(() => Tournament, tournament => tournament.ruleset, {
+  @OneToOne(() => Tournament, tournament => tournament.ruleset, {
     nullable: true,
   })
   @JoinColumn({ name: 'tournamentId' })
   tournament?: Tournament;
 
-  @ManyToOne(() => Sport, { nullable: false })
+  @ManyToOne(() => Sport, sport => sport.ruleSets, { nullable: false })
   @JoinColumn({ name: 'sportId' })
   sport: Sport;
 
@@ -65,4 +77,6 @@ export class MatchRuleSet {
 
   @UpdateDateColumn()
   updatedAt: Date;
+  @OneToMany(() => Match, match => match.ruleset)
+  matches: Match[];
 }
