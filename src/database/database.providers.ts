@@ -11,6 +11,6 @@ export const databaseProvidersPostgres: TypeOrmModuleOptions = {
   database: envs.DB_PG_DATABASE,
   synchronize: true,
   logging: true,
-  logger: 'advanced-console',
+  logger: 'debug',
   autoLoadEntities: true,
 };

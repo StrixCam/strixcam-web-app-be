@@ -5,5 +5,6 @@ import { MatchEntities } from './entities';
 
 @Module({
   imports: [TypeOrmModule.forFeature(MatchEntities)],
+  exports: [TypeOrmModule],
 })
 export class MatchModule {}

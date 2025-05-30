@@ -5,5 +5,6 @@ import { TournamentsEntities } from './entities';
 
 @Module({
   imports: [TypeOrmModule.forFeature(TournamentsEntities)],
+  exports: [TypeOrmModule],
 })
 export class TournamentsModule {}

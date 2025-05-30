@@ -5,5 +5,6 @@ import { TeamEntities } from './entities';
 
 @Module({
   imports: [TypeOrmModule.forFeature(TeamEntities)],
+  exports: [TypeOrmModule],
 })
 export class TeamsModule {}
