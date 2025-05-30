@@ -9,7 +9,7 @@ import {
 
 import { Event } from './event.entity';
 
-@Entity({ schema: 'events', name: 'event_type' })
+@Entity({ name: 'event_type' })
 export class EventType {
   @PrimaryGeneratedColumn('uuid')
   id: string;

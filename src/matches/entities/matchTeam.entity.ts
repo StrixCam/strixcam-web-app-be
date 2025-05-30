@@ -1,7 +1,7 @@
 import { Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 import { Team } from '../../teams/entities';
-import { Match } from '.';
+import { Match } from './match.entity';
 
 @Entity({ name: 'match_team' })
 export class MatchTeam {
@@ -12,7 +12,7 @@ export class MatchTeam {
   @JoinColumn({ name: 'teamId' })
   team: Team;
 
-  @ManyToOne(() => Match, match => match.matchTeam, { onDelete: 'CASCADE' })
+  @ManyToOne(() => Match, match => match.matchTeams, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'matchId' })
-  matches: Match;
+  match: Match;
 }

@@ -7,7 +7,10 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
+import { Event } from '../../events/entities/event.entity';
 import { Match } from '../../matches/entities';
+import { RuleSet } from '../../rulesets/entities/ruleSet.entity';
+import { Tournament } from '../../tournaments/entities/tournament.entity';
 
 @Entity({ name: 'sport' })
 export class Sport {
@@ -17,8 +20,8 @@ export class Sport {
   @Column({ unique: true })
   name: string;
 
-  @Column({ nullable: true })
-  description?: string;
+  @Column({ type: 'jsonb', nullable: true })
+  nameISO?: Record<string, string>;
 
   @Column({ default: true })
   isActive: boolean;
@@ -32,6 +35,16 @@ export class Sport {
   @OneToMany(() => Match, match => match.sport, { cascade: true })
   matches: Match[];
 
-  @OneToMany(() => Match, matchEvent => matchEvent.sport, { cascade: true })
-  matchEvents: Match[];
+  @OneToMany(() => Event, event => event.sport, { cascade: true })
+  events: Event[];
+
+  @OneToMany(() => RuleSet, ruleSet => ruleSet.sport, {
+    cascade: true,
+  })
+  ruleSets: RuleSet[];
+
+  @OneToMany(() => Tournament, tournament => tournament.sport, {
+    cascade: true,
+  })
+  tournaments: Tournament[];
 }

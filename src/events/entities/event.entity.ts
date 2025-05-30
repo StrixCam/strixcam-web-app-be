@@ -11,7 +11,7 @@ import {
 import { Sport } from '../../sports/entities';
 import { EventType } from './event_type.entity';
 
-@Entity({ schema: 'events', name: 'event' })
+@Entity({ name: 'event' })
 export class Event {
   @PrimaryGeneratedColumn('uuid')
   id: string;
@@ -22,7 +22,7 @@ export class Event {
   @JoinColumn({ name: 'eventTypeId' })
   eventType: EventType;
 
-  @ManyToOne(() => Sport, sport => sport.matchEvents, { onDelete: 'CASCADE' })
+  @ManyToOne(() => Sport, sport => sport.events, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'sportId' })
   sport: Sport;
 
